@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ClassConfig } from './classConfig.entity';
 import { Student } from './student.entity';
 
 @Entity()
@@ -14,4 +21,7 @@ export class Level {
 
   @OneToMany(() => Student, (student) => student.level)
   students: Student[];
+
+  @ManyToOne(() => ClassConfig, (classConfig) => classConfig.levels)
+  classConfig: ClassConfig;
 }

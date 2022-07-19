@@ -1,4 +1,12 @@
-import { Column, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Timestamp,
+} from 'typeorm';
+import { Level } from './level.entity';
+import { Student } from './student.entity';
 
 @Entity()
 export class ClassConfig {
@@ -19,4 +27,10 @@ export class ClassConfig {
 
   @Column()
   classDuration: number;
+
+  @OneToMany(() => Level, (level) => level.classConfig)
+  levels: Level[];
+
+  @OneToMany(() => Student, (student) => student.classConfig)
+  students: Student[];
 }

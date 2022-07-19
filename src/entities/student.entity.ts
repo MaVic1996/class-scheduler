@@ -5,6 +5,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ClassConfig } from './classConfig.entity';
 import { Level } from './level.entity';
 
 @Entity()
@@ -15,9 +16,12 @@ export class Student {
   @Column()
   completeName: string;
 
+  @Column('text', { array: true })
+  scheduleRestrictions: string[];
+
   @ManyToOne(() => Level, (level) => level.students)
   level: Level;
 
-  @Column('text', { array: true })
-  scheduleRestrictions: string[];
+  @ManyToOne(() => ClassConfig, (classConfig) => classConfig.students)
+  classConfig: ClassConfig;
 }
