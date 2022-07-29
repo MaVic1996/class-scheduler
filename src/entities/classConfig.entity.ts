@@ -1,10 +1,12 @@
 import {
+  BeforeInsert,
   Column,
   Entity,
   OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
 } from 'typeorm';
+import { compareSync, genSalt, hash } from 'bcrypt';
 import { Level } from './level.entity';
 import { Student } from './student.entity';
 
@@ -15,6 +17,9 @@ export class ClassConfig {
 
   @Column()
   name: string;
+
+  @Column({ type: 'varchar', length: 70, nullable: true })
+  password: string;
 
   @Column()
   workDays: string;
@@ -33,4 +38,14 @@ export class ClassConfig {
 
   @OneToMany(() => Student, (student) => student.classConfig)
   students: Student[];
+
+  @BeforeInsert()
+  async hashPassword() {
+    const salt = await genSalt();
+    this.password = await hash(this.password, salt);
+  }
+
+  async validatePassword(password: string): Promise<boolean> {
+    return await compareSync(password, this.password);
+  }
 }
